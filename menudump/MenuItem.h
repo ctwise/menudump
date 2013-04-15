@@ -9,8 +9,8 @@
 
 @interface MenuItem : NSObject
 
-@property(readwrite) NSString *name;
-@property(readwrite) NSArray *children;
-@property(readwrite) NSString *shortcut;
+@property (retain) NSString *name;
+@property (retain) NSArray *children;
+@property (retain) NSString *shortcut;
 
 @end

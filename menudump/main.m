@@ -34,7 +34,7 @@ int main(int argc, const char *argv[]) {
                 offset++;
             } else if (strncasecmp(value, "--pid", 5) == 0) {
                 if (argc >= (offset + 1)) {
-                    pid = atol(argv[offset + 1]);
+                    pid = atoi(argv[offset + 1]);
                     offset = offset + 2;
                 }
             } else {

@@ -18,7 +18,7 @@ id getAttribute(AXUIElementRef element, CFStringRef attribute) {
 }
 
 long getLongAttribute(AXUIElementRef element, CFStringRef attribute) {
-    CFNumberRef valueRef = getAttribute(element, attribute);
+    CFNumberRef valueRef = (CFNumberRef) getAttribute(element, attribute);
     long result = 0;
     if (valueRef) {
         CFNumberGetValue(valueRef, kCFNumberLongType, &result);
@@ -45,10 +45,6 @@ NSString *decodeKeyMask(long cmdModifiers) {
         }
     }
     return result;
-}
-
-NSString *getMenuItemTitle(AXUIElementRef element) {
-    return (NSString *) getAttribute(element, kAXTitleAttribute);
 }
 
 NSString *getMenuItemShortcut(AXUIElementRef element, NSDictionary *virtualKeys) {
@@ -111,10 +107,10 @@ NSArray *menuItemsForElement(NSString *bundleIdentifier, AXUIElementRef element,
 
     NSMutableArray *menuItems = [NSMutableArray array];
     for (id child in children) {
-        // We don't have focus in Alfred, so we can't use this.
+        // We don't have focus, so we can't use this.
         // if (!isEnabled((AXUIElementRef) child)) continue;
 
-        NSString *name = getMenuItemTitle((AXUIElementRef) child);
+        NSString *name = getAttribute((AXUIElementRef) child, kAXTitleAttribute);
 
         if (shouldSkip(bundleIdentifier, depth, name)) {
             continue;
@@ -126,13 +122,15 @@ NSArray *menuItemsForElement(NSString *bundleIdentifier, AXUIElementRef element,
 
         MenuItem *menuItem = [[[MenuItem alloc] init] autorelease];
         menuItem.name = name;
-        menuItem.shortcut = getMenuItemShortcut((AXUIElementRef) child, virtualKeys);
 
+        // Don't recurse further if a menu entry has too many children or we've hit max depth
         if (mChildrenCount > 0 || mChildrenCount < 40 || depth < maxDepth) {
             menuItem.children = menuItemsForElement(bundleIdentifier, (AXUIElementRef) child, depth + 1, maxDepth, virtualKeys);
         }
 
-        if (menuItem.name && [menuItem.name length] > 0) {
+        if (name && [name length] > 0) {
+            menuItem.shortcut = getMenuItemShortcut((AXUIElementRef) child, virtualKeys);
+
             [menuItems addObject:menuItem];
         } else {
             // This isn't a menu item, skip below it and get its children
@@ -166,7 +164,7 @@ NSString *buildLocator(MenuItem *item, NSArray *parents) {
         NSString *menuItem = [NSString stringWithFormat:@"menu item \"%@\"", name];
         NSMutableString *buffer = [NSMutableString stringWithString:menuItem];
 
-        int pathCount = [parents count];
+        unsigned long pathCount = [parents count];
         for (NSString *parent in [parents reverseObjectEnumerator]) {
             NSString *menuType = @"menu bar item";
             if (pathCount > 1) {
