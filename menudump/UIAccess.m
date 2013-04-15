@@ -91,6 +91,7 @@ bool shouldSkip(NSString * bundleIdentifier, NSInteger depth, NSString * name) {
         return true;
     }
 
+    // Safari-specific skips
     if (depth == 0 && [bundleIdentifier isEqualToString:@"com.apple.Safari"]) {
         // These two menus are time-sucks in Safari
         if ([name isEqualToString:@"History"] || [name isEqualToString:@"Bookmarks"]) {
@@ -107,7 +108,7 @@ NSArray *menuItemsForElement(NSString *bundleIdentifier, AXUIElementRef element,
 
     NSMutableArray *menuItems = [NSMutableArray array];
     for (id child in children) {
-        // We don't have focus, so we can't use this.
+        // We don't have focus, so we can't skip disabled menu entries.
         // if (!isEnabled((AXUIElementRef) child)) continue;
 
         NSString *name = getAttribute((AXUIElementRef) child, kAXTitleAttribute);
@@ -116,24 +117,28 @@ NSArray *menuItemsForElement(NSString *bundleIdentifier, AXUIElementRef element,
             continue;
         }
 
+        // Get any children for this menu entry
         NSArray *mChildren = nil;
         AXUIElementCopyAttributeValue(element, kAXChildrenAttribute, (CFTypeRef *) &mChildren);
         NSUInteger mChildrenCount = [mChildren count];
 
+        // Create the menu item tracking object
         MenuItem *menuItem = [[[MenuItem alloc] init] autorelease];
         menuItem.name = name;
 
         // Don't recurse further if a menu entry has too many children or we've hit max depth
         if (mChildrenCount > 0 || mChildrenCount < 40 || depth < maxDepth) {
+            // Otherwise recurse on this menu item's children
             menuItem.children = menuItemsForElement(bundleIdentifier, (AXUIElementRef) child, depth + 1, maxDepth, virtualKeys);
         }
 
+        // Save this menu item to the list if it has a name.
         if (name && [name length] > 0) {
             menuItem.shortcut = getMenuItemShortcut((AXUIElementRef) child, virtualKeys);
 
             [menuItems addObject:menuItem];
         } else {
-            // This isn't a menu item, skip below it and get its children
+            // This isn't a menu item, just save its children
             [menuItems addObjectsFromArray:menuItem.children];
         }
     }
