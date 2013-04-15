@@ -5,20 +5,7 @@
 //  Created by Charles Wise on 2/17/13.
 //
 
-#import <Foundation/Foundation.h>
-#import <ScriptingBridge/ScriptingBridge.h>
-#include "System Events.h"
 #include "UIAccess.h"
-
-pid_t getActiveApp() {
-    NSRunningApplication *app = [[NSWorkspace sharedWorkspace] menuBarOwningApplication];
-    NSString *name = app.localizedName;
-    NSString *bundleId = app.bundleIdentifier;
-    NSString *bundlePathL = app.bundleURL.path;
-    NSString *executablePath = app.executableURL.path;
-
-    return app.processIdentifier;
-}
 
 NSRunningApplication *getAppByPid(pid_t pid) {
     NSArray *appNames = [[NSWorkspace sharedWorkspace] runningApplications];
@@ -72,7 +59,7 @@ int main(int argc, const char *argv[]) {
         }
 
         if (menuApp) {
-            UIAccess *ui = [UIAccess new];
+            UIAccess *ui = [[UIAccess new] autorelease];
             NSArray *menu = [ui getAppMenu:menuApp];
             NSString *contents;
             if (outputJson) {

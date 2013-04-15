@@ -12,9 +12,18 @@
 
 id getAttribute(AXUIElementRef element, CFStringRef attribute) {
     CFTypeRef value = nil;
-    if (AXUIElementCopyAttributeValue(element, attribute, (CFTypeRef *) &value) != kAXErrorSuccess) return nil;
+    if (AXUIElementCopyAttributeValue(element, attribute, &value) != kAXErrorSuccess) return nil;
     if (AXValueGetType((AXValueRef) value) == kAXValueAXErrorType) return nil;
     return value;
+}
+
+long getLongAttribute(AXUIElementRef element, CFStringRef attribute) {
+    CFNumberRef valueRef = getAttribute(element, attribute);
+    long result = 0;
+    if (valueRef) {
+        CFNumberGetValue(valueRef, kCFNumberLongType, &result);
+    }
+    return result;
 }
 
 NSString *decodeKeyMask(long cmdModifiers) {
@@ -40,15 +49,6 @@ NSString *decodeKeyMask(long cmdModifiers) {
 
 NSString *getMenuItemTitle(AXUIElementRef element) {
     return (NSString *) getAttribute(element, kAXTitleAttribute);
-}
-
-long getLongAttribute(AXUIElementRef element, CFStringRef attribute) {
-    CFNumberRef valueRef = getAttribute(element, attribute);
-    long result = 0;
-    if (valueRef) {
-        CFNumberGetValue(valueRef, kCFNumberLongType, &result);
-    }
-    return result;
 }
 
 NSString *getMenuItemShortcut(AXUIElementRef element, NSDictionary *virtualKeys) {
@@ -78,7 +78,7 @@ NSString *getMenuItemShortcut(AXUIElementRef element, NSDictionary *virtualKeys)
     return result;
 }
 
-Boolean isEnabled(AXUIElementRef element) {
+bool __unused isEnabled(AXUIElementRef element) {
     CFTypeRef enabled = NULL;
     if (AXUIElementCopyAttributeValue(element, kAXEnabledAttribute, &enabled) != kAXErrorSuccess) return false;
     return CFBooleanGetValue(enabled);
@@ -105,7 +105,7 @@ bool shouldSkip(NSString * bundleIdentifier, NSInteger depth, NSString * name) {
     return false;
 }
 
-NSArray *menuItemsForElement(NSString * bundleIdentifier, AXUIElementRef element, NSInteger depth, NSString *elementName, NSInteger maxDepth, NSDictionary *virtualKeys) {
+NSArray *menuItemsForElement(NSString *bundleIdentifier, AXUIElementRef element, NSInteger depth, NSInteger maxDepth, NSDictionary *virtualKeys) {
     NSArray *children = nil;
     AXUIElementCopyAttributeValue(element, kAXChildrenAttribute, (CFTypeRef *) &children);
 
@@ -124,13 +124,12 @@ NSArray *menuItemsForElement(NSString * bundleIdentifier, AXUIElementRef element
         AXUIElementCopyAttributeValue(element, kAXChildrenAttribute, (CFTypeRef *) &mChildren);
         NSUInteger mChildrenCount = [mChildren count];
 
-        MenuItem *menuItem = [[MenuItem alloc] init];
+        MenuItem *menuItem = [[[MenuItem alloc] init] autorelease];
         menuItem.name = name;
-        menuItem.depth = depth;
         menuItem.shortcut = getMenuItemShortcut((AXUIElementRef) child, virtualKeys);
 
         if (mChildrenCount > 0 || mChildrenCount < 40 || depth < maxDepth) {
-            menuItem.children = menuItemsForElement(bundleIdentifier, (AXUIElementRef) child, depth + 1, name, maxDepth, virtualKeys);
+            menuItem.children = menuItemsForElement(bundleIdentifier, (AXUIElementRef) child, depth + 1, maxDepth, virtualKeys);
         }
 
         if (menuItem.name && [menuItem.name length] > 0) {
@@ -283,11 +282,7 @@ NSString *menuToYAML(NSArray *menu, int startingOffset, NSArray *parents) {
     return buffer;
 }
 
-- (NSArray *)getAppMenu:(NSRunningApplication *)menuApp {
-    AXUIElementRef app = AXUIElementCreateApplication(menuApp.processIdentifier);
-    AXUIElementRef menuBar;
-    AXUIElementCopyAttributeValue(app, kAXMenuBarAttribute, (CFTypeRef *) &menuBar);
-
+NSMutableDictionary * buildVirtualKeyDictionary() {
     NSMutableDictionary *virtualKeys = [NSMutableDictionary dictionary];
 
     [virtualKeys setObject:@"↩" forKey:[NSNumber numberWithLong:0x24]]; // kVK_Return
@@ -329,7 +324,15 @@ NSString *menuToYAML(NSArray *menu, int startingOffset, NSArray *parents) {
     [virtualKeys setObject:@"↓" forKey:[NSNumber numberWithLong:0x7D]]; // kVK_DownArrow
     [virtualKeys setObject:@"↑" forKey:[NSNumber numberWithLong:0x7E]]; // kVK_UpArrow
 
-    return menuItemsForElement(menuApp.bundleIdentifier, menuBar, 0, @"Top", 5, virtualKeys);
+    return virtualKeys;
+}
+
+- (NSArray *)getAppMenu:(NSRunningApplication *)menuApp {
+    AXUIElementRef app = AXUIElementCreateApplication(menuApp.processIdentifier);
+    AXUIElementRef menuBar;
+    AXUIElementCopyAttributeValue(app, kAXMenuBarAttribute, (CFTypeRef *) &menuBar);
+
+    return menuItemsForElement(menuApp.bundleIdentifier, menuBar, 0, 5, buildVirtualKeyDictionary());
 }
 
 - (NSString *)convertMenuToJSON:(NSArray *)menu app:(NSRunningApplication *)menuApp {
@@ -347,7 +350,7 @@ NSString *menuToYAML(NSArray *menu, int startingOffset, NSArray *parents) {
     [buffer appendString:menuApp.executableURL.path];
     [buffer appendString:@"\"\n"];
     [buffer appendString:@"  \"menus\":"];
-    [buffer appendString:menuToJSON(menu, 2, [[NSArray alloc] init])];
+    [buffer appendString:menuToJSON(menu, 2, [[[NSArray alloc] init] autorelease])];
     [buffer appendString:@"}"];
     return buffer;
 }
@@ -367,7 +370,7 @@ NSString *menuToYAML(NSArray *menu, int startingOffset, NSArray *parents) {
     [buffer appendString:menuApp.executableURL.path];
     [buffer appendString:@"\"\n"];
     [buffer appendString:@"menus:\n"];
-    [buffer appendString:menuToYAML(menu, 0, [[NSArray alloc] init])];
+    [buffer appendString:menuToYAML(menu, 0, [[[NSArray alloc] init] autorelease])];
     return buffer;
 }
 @end

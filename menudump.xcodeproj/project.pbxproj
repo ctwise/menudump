@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		150A869416D127BC00DE69E3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 150A869316D127BC00DE69E3 /* Foundation.framework */; };
 		150A869716D127BC00DE69E3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 150A869616D127BC00DE69E3 /* main.m */; };
-		150A869B16D127BC00DE69E3 /* menu_test.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 150A869A16D127BC00DE69E3 /* menu_test.1 */; };
 		150A86A216D1284800DE69E3 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 150A86A116D1284800DE69E3 /* ScriptingBridge.framework */; };
 		150A86A616D12D3200DE69E3 /* System Events.app in Sources */ = {isa = PBXBuildFile; fileRef = 150A86A516D12D0D00DE69E3 /* System Events.app */; };
 		151D1108171A1FC7007F052E /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 151D1107171A1FC7007F052E /* AppKit.framework */; };
@@ -39,7 +38,6 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				150A869B16D127BC00DE69E3 /* menu_test.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -50,7 +48,6 @@
 		150A869316D127BC00DE69E3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		150A869616D127BC00DE69E3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		150A869916D127BC00DE69E3 /* menudump-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "menudump-Prefix.pch"; sourceTree = "<group>"; };
-		150A869A16D127BC00DE69E3 /* menu_test.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = menu_test.1; sourceTree = "<group>"; };
 		150A86A116D1284800DE69E3 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 		150A86A516D12D0D00DE69E3 /* System Events.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = "System Events.app"; path = "../../../../../System/Library/CoreServices/System Events.app"; sourceTree = "<group>"; };
 		151D1107171A1FC7007F052E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -59,6 +56,7 @@
 		15CB4B2B16EA5F110079928D /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		15DC2D331718947A00361B29 /* MenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItem.h; sourceTree = "<group>"; };
 		15DC2D341718947A00361B29 /* MenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItem.m; sourceTree = "<group>"; };
+		AF8A13F4E656879E540CC4F5 /* menudump.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; path = menudump.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,12 +107,12 @@
 			isa = PBXGroup;
 			children = (
 				150A869616D127BC00DE69E3 /* main.m */,
-				150A869A16D127BC00DE69E3 /* menu_test.1 */,
 				150A869816D127BC00DE69E3 /* Supporting Files */,
 				15B0175D16E3F7B200464C5B /* UIAccess.h */,
 				15B0175E16E3F7B200464C5B /* UIAccess.m */,
 				15DC2D331718947A00361B29 /* MenuItem.h */,
 				15DC2D341718947A00361B29 /* MenuItem.m */,
+				AF8A13F4E656879E540CC4F5 /* menudump.1 */,
 			);
 			path = menudump;
 			sourceTree = "<group>";
