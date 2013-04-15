@@ -5,7 +5,6 @@
 //  Created by Charles Wise on 3/3/13.
 //
 
-#import <ApplicationServices/ApplicationServices.h>
 #import "UIAccess.h"
 #import "MenuItem.h"
 
@@ -85,7 +84,28 @@ Boolean isEnabled(AXUIElementRef element) {
     return CFBooleanGetValue(enabled);
 }
 
-NSArray *menuItemsForElement(AXUIElementRef element, NSInteger depth, NSString *elementName, NSInteger maxDepth, NSDictionary *virtualKeys) {
+bool shouldSkip(NSString * bundleIdentifier, NSInteger depth, NSString * name) {
+    // Skip the top-level Apple menu
+    if (depth == 0 && [name isEqualToString:@"Apple"]) {
+        return true;
+    }
+
+    // Skip the Services menu
+    if (depth == 2 && [name isEqualToString:@"Services"]) {
+        return true;
+    }
+
+    if (depth == 0 && [bundleIdentifier isEqualToString:@"com.apple.Safari"]) {
+        // These two menus are time-sucks in Safari
+        if ([name isEqualToString:@"History"] || [name isEqualToString:@"Bookmarks"]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+NSArray *menuItemsForElement(NSString * bundleIdentifier, AXUIElementRef element, NSInteger depth, NSString *elementName, NSInteger maxDepth, NSDictionary *virtualKeys) {
     NSArray *children = nil;
     AXUIElementCopyAttributeValue(element, kAXChildrenAttribute, (CFTypeRef *) &children);
 
@@ -96,13 +116,7 @@ NSArray *menuItemsForElement(AXUIElementRef element, NSInteger depth, NSString *
 
         NSString *name = getMenuItemTitle((AXUIElementRef) child);
 
-        // Skip the top-level Apple menu
-        if (depth == 0 && [name isEqualToString:@"Apple"]) {
-            continue;
-        }
-
-        // Skip the Services menu
-        if (depth == 2 && [name isEqualToString:@"Services"]) {
+        if (shouldSkip(bundleIdentifier, depth, name)) {
             continue;
         }
 
@@ -116,7 +130,7 @@ NSArray *menuItemsForElement(AXUIElementRef element, NSInteger depth, NSString *
         menuItem.shortcut = getMenuItemShortcut((AXUIElementRef) child, virtualKeys);
 
         if (mChildrenCount > 0 || mChildrenCount < 40 || depth < maxDepth) {
-            menuItem.children = menuItemsForElement((AXUIElementRef) child, depth + 1, name, maxDepth, virtualKeys);
+            menuItem.children = menuItemsForElement(bundleIdentifier, (AXUIElementRef) child, depth + 1, name, maxDepth, virtualKeys);
         }
 
         if (menuItem.name && [menuItem.name length] > 0) {
@@ -315,7 +329,7 @@ NSString *menuToYAML(NSArray *menu, int startingOffset, NSArray *parents) {
     [virtualKeys setObject:@"↓" forKey:[NSNumber numberWithLong:0x7D]]; // kVK_DownArrow
     [virtualKeys setObject:@"↑" forKey:[NSNumber numberWithLong:0x7E]]; // kVK_UpArrow
 
-    return menuItemsForElement(menuBar, 0, @"Top", 5, virtualKeys);
+    return menuItemsForElement(menuApp.bundleIdentifier, menuBar, 0, @"Top", 5, virtualKeys);
 }
 
 - (NSString *)convertMenuToJSON:(NSArray *)menu app:(NSRunningApplication *)menuApp {
