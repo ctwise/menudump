@@ -46,7 +46,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		150A869016D127BC00DE69E3 /* menudump */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "menudump"; sourceTree = BUILT_PRODUCTS_DIR; };
+		150A869016D127BC00DE69E3 /* menudump */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = menudump; sourceTree = BUILT_PRODUCTS_DIR; };
 		150A869316D127BC00DE69E3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		150A869616D127BC00DE69E3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		150A869916D127BC00DE69E3 /* menudump-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "menudump-Prefix.pch"; sourceTree = "<group>"; };
@@ -116,7 +116,7 @@
 				15DC2D331718947A00361B29 /* MenuItem.h */,
 				15DC2D341718947A00361B29 /* MenuItem.m */,
 			);
-			path = "menudump";
+			path = menudump;
 			sourceTree = "<group>";
 		};
 		150A869816D127BC00DE69E3 /* Supporting Files */ = {
@@ -143,8 +143,8 @@
 			);
 			dependencies = (
 			);
-			name = "menudump";
-			productName = "menudump";
+			name = menudump;
+			productName = menudump;
 			productReference = 150A869016D127BC00DE69E3 /* menudump */;
 			productType = "com.apple.product-type.tool";
 		};
