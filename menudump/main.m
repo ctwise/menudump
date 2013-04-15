@@ -43,6 +43,7 @@ int main(int argc, const char *argv[]) {
         }
 
         if (showHelp) {
+            printf("menudump v1.1\n");
             printf("Usage: menudump [--pid <pid>] [--yaml] [--help]\n");
             printf("  Dumps the menu contents of a given application in JSON format. Defaults to the front-most application.\n");
             printf("  --pid <pid> to target a specific application.\n");
