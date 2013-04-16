@@ -15,6 +15,8 @@
 		15B0176016E3F7B200464C5B /* UIAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B0175E16E3F7B200464C5B /* UIAccess.m */; };
 		15CB4B2C16EA5F110079928D /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CB4B2B16EA5F110079928D /* ApplicationServices.framework */; };
 		15DC2D351718947A00361B29 /* MenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 15DC2D341718947A00361B29 /* MenuItem.m */; };
+		AF8A100E44B7CAE564B62049 /* Logger.m in Sources */ = {isa = PBXBuildFile; fileRef = AF8A11BABFA13790B9AD743D /* Logger.m */; };
+		AF8A1862A711F8EE19D945CD /* Logger.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = AF8A15818A46FE60AFE79627 /* Logger.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -38,6 +40,7 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
+				AF8A1862A711F8EE19D945CD /* Logger.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -56,7 +59,9 @@
 		15CB4B2B16EA5F110079928D /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		15DC2D331718947A00361B29 /* MenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItem.h; sourceTree = "<group>"; };
 		15DC2D341718947A00361B29 /* MenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItem.m; sourceTree = "<group>"; };
+		AF8A11BABFA13790B9AD743D /* Logger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Logger.m; sourceTree = "<group>"; };
 		AF8A13F4E656879E540CC4F5 /* menudump.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; path = menudump.1; sourceTree = "<group>"; };
+		AF8A15818A46FE60AFE79627 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +118,8 @@
 				15DC2D331718947A00361B29 /* MenuItem.h */,
 				15DC2D341718947A00361B29 /* MenuItem.m */,
 				AF8A13F4E656879E540CC4F5 /* menudump.1 */,
+				AF8A11BABFA13790B9AD743D /* Logger.m */,
+				AF8A15818A46FE60AFE79627 /* Logger.h */,
 			);
 			path = menudump;
 			sourceTree = "<group>";
@@ -181,6 +188,7 @@
 				150A86A616D12D3200DE69E3 /* System Events.app in Sources */,
 				15B0176016E3F7B200464C5B /* UIAccess.m in Sources */,
 				15DC2D351718947A00361B29 /* MenuItem.m in Sources */,
+				AF8A100E44B7CAE564B62049 /* Logger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

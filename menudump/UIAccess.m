@@ -7,14 +7,22 @@
 
 #import "UIAccess.h"
 #import "MenuItem.h"
+#import "Logger.h"
 
 @implementation UIAccess
 
 id getAttribute(AXUIElementRef element, CFStringRef attribute) {
+    trace(@"Getting attribute %@", attribute);
     CFTypeRef value = nil;
     if (AXUIElementCopyAttributeValue(element, attribute, &value) != kAXErrorSuccess) return nil;
     if (AXValueGetType((AXValueRef) value) == kAXValueAXErrorType) return nil;
     return value;
+}
+
+bool __unused isEnabled(AXUIElementRef element) {
+    CFTypeRef enabled = NULL;
+    if (AXUIElementCopyAttributeValue(element, kAXEnabledAttribute, &enabled) != kAXErrorSuccess) return false;
+    return CFBooleanGetValue(enabled);
 }
 
 long getLongAttribute(AXUIElementRef element, CFStringRef attribute) {
@@ -27,6 +35,7 @@ long getLongAttribute(AXUIElementRef element, CFStringRef attribute) {
 }
 
 NSString *decodeKeyMask(long cmdModifiers) {
+    trace(@"Decoding key mask %li", cmdModifiers)
     NSString *result = @"";
     if (cmdModifiers == 0x18) {
         result = @"fn fn";
@@ -48,6 +57,7 @@ NSString *decodeKeyMask(long cmdModifiers) {
 }
 
 NSString *getMenuItemShortcut(AXUIElementRef element, NSDictionary *virtualKeys) {
+    trace(@"Getting menu item shortcut");
     NSString *result = nil;
 
     NSString *cmdChar = getAttribute(element, kAXMenuItemCmdCharAttribute);
@@ -65,44 +75,36 @@ NSString *getMenuItemShortcut(AXUIElementRef element, NSDictionary *virtualKeys)
             base = virtualLookup;
         }
     }
-//    NSString *cmdGlyph = (NSString *) getAttribute(element, kAXMenuItemCmdGlyphAttribute);
-//    NSString *cmdMark = (NSString *) getAttribute(element, kAXMenuItemMarkCharAttribute);
     NSString *modifiers = decodeKeyMask(cmdModifiers);
     if (base) {
         result = [modifiers stringByAppendingString:base];
     }
+    trace(@"Shortcut is %@", result);
     return result;
 }
 
-bool __unused isEnabled(AXUIElementRef element) {
-    CFTypeRef enabled = NULL;
-    if (AXUIElementCopyAttributeValue(element, kAXEnabledAttribute, &enabled) != kAXErrorSuccess) return false;
-    return CFBooleanGetValue(enabled);
-}
-
 bool shouldSkip(NSString * bundleIdentifier, NSInteger depth, NSString * name) {
+    bool result = false;
+
     // Skip the top-level Apple menu
     if (depth == 0 && [name isEqualToString:@"Apple"]) {
-        return true;
-    }
-
-    // Skip the Services menu
-    if (depth == 2 && [name isEqualToString:@"Services"]) {
-        return true;
-    }
-
-    // Safari-specific skips
-    if (depth == 0 && [bundleIdentifier isEqualToString:@"com.apple.Safari"]) {
+        result = true;
+    } else if (depth == 2 && [name isEqualToString:@"Services"]) {
+        result = true;
+    } else if (depth == 0 && [bundleIdentifier isEqualToString:@"com.apple.Safari"]) {
         // These two menus are time-sucks in Safari
         if ([name isEqualToString:@"History"] || [name isEqualToString:@"Bookmarks"]) {
-            return true;
+            result = true;
         }
     }
 
-    return false;
+    trace(@"Check to see if we should skip menu item %@, at depth %i, for app %@", name, depth, bundleIdentifier);
+
+    return result;
 }
 
 NSArray *menuItemsForElement(NSString *bundleIdentifier, AXUIElementRef element, NSInteger depth, NSInteger maxDepth, NSDictionary *virtualKeys) {
+    debug(@"%@Looking at menu at depth %i", padding((int) depth), depth);
     NSArray *children = nil;
     AXUIElementCopyAttributeValue(element, kAXChildrenAttribute, (CFTypeRef *) &children);
 
@@ -139,6 +141,9 @@ NSArray *menuItemsForElement(NSString *bundleIdentifier, AXUIElementRef element,
             [menuItems addObject:menuItem];
         } else {
             // This isn't a menu item, just save its children
+
+            debug(@"%@Skipping menu item", padding((int)(depth + 1)));
+
             [menuItems addObjectsFromArray:menuItem.children];
         }
     }
@@ -339,6 +344,7 @@ NSMutableDictionary * buildVirtualKeyDictionary() {
 }
 
 - (NSString *)convertMenuToJSON:(NSArray *)menu app:(NSRunningApplication *)menuApp {
+    debug(@"Converting menu to JSON");
     NSMutableString *buffer = [NSMutableString stringWithString:@"{\n"];
     [buffer appendString:@"  \"name\": \""];
     [buffer appendString:menuApp.localizedName];
@@ -359,6 +365,7 @@ NSMutableDictionary * buildVirtualKeyDictionary() {
 }
 
 - (NSString *)convertMenuToYAML:(NSArray *)menu app:(NSRunningApplication *)menuApp {
+    debug(@"Converting menu to YAML");
     NSMutableString *buffer = [NSMutableString stringWithString:@"application:\n"];
     [buffer appendString:@"    name: \""];
     [buffer appendString:menuApp.localizedName];
