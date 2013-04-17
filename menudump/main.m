@@ -80,6 +80,10 @@ int main(int argc, const char *argv[]) {
         if (menuApp) {
             UIAccess *ui = [[UIAccess new] autorelease];
             NSArray *menu = [ui getAppMenu:menuApp];
+            if (menu && [menu count] == 0) {
+                printf("The menu structure wasn't readable. Make sure that 'Enable access for assistive devices' is checked in OS/X Settings.");
+                exit(1);
+            }
             NSString *contents;
             if (outputJson) {
                 contents = [ui convertMenuToJSON:menu app:menuApp];
