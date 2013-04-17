@@ -38,13 +38,11 @@
             // change the queues if you like
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    NSLog(msg);
-//                    fprintf(stdout,"%s\n", [msg UTF8String]);
+                    NSLog(@"%@", msg);
                 });
             });
         } else {
-            NSLog(msg);
-//            fprintf(stdout,"%s\n", [msg UTF8String]);
+            NSLog(@"%@", msg);
         }
 
     }
