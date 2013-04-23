@@ -294,39 +294,40 @@ NSMutableDictionary * buildVirtualKeyDictionary() {
     NSMutableDictionary *virtualKeys = [NSMutableDictionary dictionary];
 
     [virtualKeys setObject:@"↩" forKey:[NSNumber numberWithLong:0x24]]; // kVK_Return
-    [virtualKeys setObject:@"⌤" forKey:[NSNumber numberWithLong:0x4C]]; // kVK_ANSI_KeypadEnter
-    [virtualKeys setObject:@"⌧" forKey:[NSNumber numberWithLong:0x47]]; // kVK_ANSI_KeypadClear
     [virtualKeys setObject:@"⇥" forKey:[NSNumber numberWithLong:0x30]]; // kVK_Tab
     [virtualKeys setObject:@"␣" forKey:[NSNumber numberWithLong:0x31]]; // kVK_Space
     [virtualKeys setObject:@"⌫" forKey:[NSNumber numberWithLong:0x33]]; // kVK_Delete
     [virtualKeys setObject:@"⎋" forKey:[NSNumber numberWithLong:0x35]]; // kVK_Escape
     [virtualKeys setObject:@"⇪" forKey:[NSNumber numberWithLong:0x39]]; // kVK_CapsLock
     [virtualKeys setObject:@"fn" forKey:[NSNumber numberWithLong:0x3F]]; // kVK_Function
-    [virtualKeys setObject:@"F1" forKey:[NSNumber numberWithLong:0x7A]]; // kVK_F1
-    [virtualKeys setObject:@"F2" forKey:[NSNumber numberWithLong:0x78]]; // kVK_F2
-    [virtualKeys setObject:@"F3" forKey:[NSNumber numberWithLong:0x63]]; // kVK_F3
-    [virtualKeys setObject:@"F4" forKey:[NSNumber numberWithLong:0x76]]; // kVK_F4
-    [virtualKeys setObject:@"F5" forKey:[NSNumber numberWithLong:0x60]]; // kVK_F5
-    [virtualKeys setObject:@"F6" forKey:[NSNumber numberWithLong:0x61]]; // kVK_F6
-    [virtualKeys setObject:@"F7" forKey:[NSNumber numberWithLong:0x62]]; // kVK_F7
-    [virtualKeys setObject:@"F8" forKey:[NSNumber numberWithLong:0x64]]; // kVK_F8
-    [virtualKeys setObject:@"F9" forKey:[NSNumber numberWithLong:0x65]]; // kVK_F9
-    [virtualKeys setObject:@"F10" forKey:[NSNumber numberWithLong:0x6D]]; // kVK_F10
-    [virtualKeys setObject:@"F11" forKey:[NSNumber numberWithLong:0x67]]; // kVK_F11
-    [virtualKeys setObject:@"F12" forKey:[NSNumber numberWithLong:0x6F]]; // kVK_F12
-    [virtualKeys setObject:@"F13" forKey:[NSNumber numberWithLong:0x69]]; // kVK_F13
-    [virtualKeys setObject:@"F14" forKey:[NSNumber numberWithLong:0x6B]]; // kVK_F14
-    [virtualKeys setObject:@"F15" forKey:[NSNumber numberWithLong:0x71]]; // kVK_F15
-    [virtualKeys setObject:@"F16" forKey:[NSNumber numberWithLong:0x6A]]; // kVK_F16
     [virtualKeys setObject:@"F17" forKey:[NSNumber numberWithLong:0x40]]; // kVK_F17
+    [virtualKeys setObject:@"⌧" forKey:[NSNumber numberWithLong:0x47]]; // kVK_ANSI_KeypadClear
+    [virtualKeys setObject:@"⌤" forKey:[NSNumber numberWithLong:0x4C]]; // kVK_ANSI_KeypadEnter
     [virtualKeys setObject:@"F18" forKey:[NSNumber numberWithLong:0x4F]]; // kVK_F18
     [virtualKeys setObject:@"F19" forKey:[NSNumber numberWithLong:0x50]]; // kVK_F19
     [virtualKeys setObject:@"F20" forKey:[NSNumber numberWithLong:0x5A]]; // kVK_F20
+    [virtualKeys setObject:@"F5" forKey:[NSNumber numberWithLong:0x60]]; // kVK_F5
+    [virtualKeys setObject:@"F6" forKey:[NSNumber numberWithLong:0x61]]; // kVK_F6
+    [virtualKeys setObject:@"F7" forKey:[NSNumber numberWithLong:0x62]]; // kVK_F7
+    [virtualKeys setObject:@"F3" forKey:[NSNumber numberWithLong:0x63]]; // kVK_F3
+    [virtualKeys setObject:@"F8" forKey:[NSNumber numberWithLong:0x64]]; // kVK_F8
+    [virtualKeys setObject:@"F9" forKey:[NSNumber numberWithLong:0x65]]; // kVK_F9
+    [virtualKeys setObject:@"F11" forKey:[NSNumber numberWithLong:0x67]]; // kVK_F11
+    [virtualKeys setObject:@"F13" forKey:[NSNumber numberWithLong:0x69]]; // kVK_F13
+    [virtualKeys setObject:@"F16" forKey:[NSNumber numberWithLong:0x6A]]; // kVK_F16
+    [virtualKeys setObject:@"F14" forKey:[NSNumber numberWithLong:0x6B]]; // kVK_F14
+    [virtualKeys setObject:@"F10" forKey:[NSNumber numberWithLong:0x6D]]; // kVK_F10
+    [virtualKeys setObject:@"F12" forKey:[NSNumber numberWithLong:0x6F]]; // kVK_F12
+    [virtualKeys setObject:@"F15" forKey:[NSNumber numberWithLong:0x71]]; // kVK_F15
+    [virtualKeys setObject:@"INS" forKey:[NSNumber numberWithLong:0x72]]; // Insert
     [virtualKeys setObject:@"↖" forKey:[NSNumber numberWithLong:0x73]]; // kVK_Home
     [virtualKeys setObject:@"⇞" forKey:[NSNumber numberWithLong:0x74]]; // kVK_PageUp
     [virtualKeys setObject:@"⌦" forKey:[NSNumber numberWithLong:0x75]]; // kVK_ForwardDelete
+    [virtualKeys setObject:@"F4" forKey:[NSNumber numberWithLong:0x76]]; // kVK_F4
     [virtualKeys setObject:@"↘" forKey:[NSNumber numberWithLong:0x77]]; // kVK_End
+    [virtualKeys setObject:@"F2" forKey:[NSNumber numberWithLong:0x78]]; // kVK_F2
     [virtualKeys setObject:@"⇟" forKey:[NSNumber numberWithLong:0x79]]; // kVK_PageDown
+    [virtualKeys setObject:@"F1" forKey:[NSNumber numberWithLong:0x7A]]; // kVK_F1
     [virtualKeys setObject:@"←" forKey:[NSNumber numberWithLong:0x7B]]; // kVK_LeftArrow
     [virtualKeys setObject:@"→" forKey:[NSNumber numberWithLong:0x7C]]; // kVK_RightArrow
     [virtualKeys setObject:@"↓" forKey:[NSNumber numberWithLong:0x7D]]; // kVK_DownArrow
