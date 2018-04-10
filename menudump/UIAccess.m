@@ -219,6 +219,7 @@ NSString *menuToJSON(NSArray *menu, int depth, NSArray *parents) {
         [buffer appendString:@" "];
     }
     [buffer appendString:@"[\n"];
+    int i = 0;
     for (MenuItem *item in menu) {
         [buffer appendString:offset2];
         [buffer appendString:@"{\n"];
@@ -247,7 +248,12 @@ NSString *menuToJSON(NSArray *menu, int depth, NSArray *parents) {
         [buffer appendString:[NSString stringWithFormat:@"\"children\": %@\n", children]];
 
         [buffer appendString:offset2];
-        [buffer appendString:@"},\n"];
+        i += 1;
+        if (i == [menu count]) {
+          [buffer appendString:@"}\n"];
+        } else {
+          [buffer appendString:@"},\n"];
+        }
     }
     [buffer appendString:offset];
     [buffer appendString:@"]\n"];
@@ -349,16 +355,16 @@ NSMutableDictionary * buildVirtualKeyDictionary() {
     NSMutableString *buffer = [NSMutableString stringWithString:@"{\n"];
     [buffer appendString:@"  \"name\": \""];
     [buffer appendString:menuApp.localizedName];
-    [buffer appendString:@"\"\n"];
+    [buffer appendString:@"\",\n"];
     [buffer appendString:@"  \"bundleIdentifier\": \""];
     [buffer appendString:menuApp.bundleIdentifier];
-    [buffer appendString:@"\"\n"];
+    [buffer appendString:@"\",\n"];
     [buffer appendString:@"  \"bundlePath\": \""];
     [buffer appendString:menuApp.bundleURL.path];
-    [buffer appendString:@"\"\n"];
+    [buffer appendString:@"\",\n"];
     [buffer appendString:@"  \"executablePath\": \""];
     [buffer appendString:menuApp.executableURL.path];
-    [buffer appendString:@"\"\n"];
+    [buffer appendString:@"\",\n"];
     [buffer appendString:@"  \"menus\":"];
     [buffer appendString:menuToJSON(menu, 2, [[[NSArray alloc] init] autorelease])];
     [buffer appendString:@"}"];
